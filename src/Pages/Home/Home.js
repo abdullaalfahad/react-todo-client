@@ -1,11 +1,29 @@
-import React from 'react';
-import { Button, Container, Form } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Button, Container, Form, Table } from 'react-bootstrap';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from 'firebase/auth';
 import auth from '../../firebase.init';
+import Task from '../Task/Task';
+import { useQuery } from 'react-query';
+import Loading from '../Loading/Loading';
 
 const Home = () => {
     const [user] = useAuthState(auth);
+    // const [tasks, setTasks] = useState([]);
+
+    // useEffect(() => {
+    //     fetch('http://localhost:5000/tasks')
+    //         .then(res => res.json())
+    //         .then(data => setTasks(data))
+    // }, [])
+
+    const { isLoading, refetch, data: tasks } = useQuery('tasks', () =>
+        fetch('http://localhost:5000/tasks').then(res =>
+            res.json()))
+
+    if (isLoading) {
+        return <Loading></Loading>
+    }
 
     const addTask = (event) => {
         event.preventDefault();
@@ -28,6 +46,7 @@ const Home = () => {
                 console.log('Success:', data);
                 event.target.reset();
             })
+        refetch();
     }
     return (
         <div className="mt-3 mb-5">
@@ -37,7 +56,7 @@ const Home = () => {
                     {user && <Button onClick={() => signOut(auth)}>Log Out</Button>}
                 </div>
 
-                <div className='mt-5'>
+                <div className='my-5'>
                     <Form onSubmit={addTask}>
                         <Form.Group className="mb-3" controlId="formBasicName">
                             <Form.Label>Name</Form.Label>
@@ -49,6 +68,20 @@ const Home = () => {
                         </Form.Group>
                         <Button type="submit">Add Task</Button>
                     </Form>
+                </div>
+                <div>
+                    <h1>TODO List: {tasks.length}</h1>
+                    <Table striped bordered hover responsive>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Manage</th>
+                            </tr>
+                        </thead>
+                        {tasks.map((task, index) => <Task key={task._id} task={task} index={index}></Task>)}
+                    </Table>
                 </div>
             </Container>
         </div>
