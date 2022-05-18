@@ -1,6 +1,5 @@
-import { Button } from 'bootstrap';
 import React, { useRef } from 'react';
-import { Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
@@ -10,10 +9,7 @@ const Login = () => {
     const emailRef = useRef('');
     const passwordRef = useRef('');
     const navigate = useNavigate();
-    const location = useLocation();
 
-
-    let from = location.state?.from?.pathname || "/";
     let errorElement;
     const [
         signInWithEmailAndPassword,
@@ -28,7 +24,7 @@ const Login = () => {
     }
 
     if (user || gUser) {
-        navigate(from, { replace: true });
+        navigate('/');
     }
 
     if (error || gError) {
@@ -67,11 +63,11 @@ const Login = () => {
             </div>
             {errorElement}
             <div className=''>
-                <button
+                <Button
                     onClick={() => signInWithGoogle()}
-                    className='btn btn-info w-50 d-block mx-auto my-2'>
+                    className='btn btn-primary w-50 d-block mx-auto my-2'>
                     Continue with Google
-                </button>
+                </Button>
             </div>
         </div>
     );
