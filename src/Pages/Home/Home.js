@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Form, Table } from 'react-bootstrap';
+import { Alert, Button, Container, Form, Table } from 'react-bootstrap';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from 'firebase/auth';
 import auth from '../../firebase.init';
@@ -9,13 +9,6 @@ import Loading from '../Loading/Loading';
 
 const Home = () => {
     const [user] = useAuthState(auth);
-    // const [tasks, setTasks] = useState([]);
-
-    // useEffect(() => {
-    //     fetch('http://localhost:5000/tasks')
-    //         .then(res => res.json())
-    //         .then(data => setTasks(data))
-    // }, [])
 
     const { isLoading, refetch, data: tasks } = useQuery('tasks', () =>
         fetch('http://localhost:5000/tasks').then(res =>
@@ -33,7 +26,6 @@ const Home = () => {
             description: event.target.description.value
         }
 
-        console.log(task);
         fetch('http://localhost:5000/tasks', {
             method: 'POST',
             headers: {
@@ -43,10 +35,10 @@ const Home = () => {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('Success:', data);
-                event.target.reset();
+                alert('Task Added SuccessFully')
             })
         refetch();
+        event.target.reset();
     }
     return (
         <div className="mt-3 mb-5">
@@ -80,7 +72,7 @@ const Home = () => {
                                 <th>Manage</th>
                             </tr>
                         </thead>
-                        {tasks.map((task, index) => <Task key={task._id} task={task} index={index}></Task>)}
+                        {tasks.map((task, index) => <Task key={task._id} task={task} index={index} tasks={tasks}></Task>)}
                     </Table>
                 </div>
             </Container>
