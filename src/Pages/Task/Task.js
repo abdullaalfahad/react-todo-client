@@ -13,7 +13,7 @@ const Task = ({ task, index, refetch }) => {
     const handleDelete = id => {
         const proceed = window.confirm('Are you sure?');
         if (proceed) {
-            const url = `http://localhost:5000/task/${id}`;
+            const url = `https://secure-sea-45014.herokuapp.com/task/${id}`;
             fetch(url, {
                 method: 'DELETE'
             })

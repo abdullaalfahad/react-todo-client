@@ -11,7 +11,7 @@ const Home = () => {
     const [user] = useAuthState(auth);
 
     const { isLoading, refetch, data: tasks } = useQuery('tasks', () =>
-        fetch('http://localhost:5000/tasks').then(res =>
+        fetch('https://secure-sea-45014.herokuapp.com/tasks').then(res =>
             res.json()))
 
     if (isLoading) {
@@ -26,7 +26,7 @@ const Home = () => {
             description: event.target.description.value
         }
 
-        fetch('http://localhost:5000/tasks', {
+        fetch('https://secure-sea-45014.herokuapp.com/tasks', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
