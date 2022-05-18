@@ -62,7 +62,7 @@ const Home = () => {
                     </Form>
                 </div>
                 <div>
-                    <h1>TODO List: {tasks.length}</h1>
+                    <h1>TODO List: {tasks?.length}</h1>
                     <Table striped bordered hover responsive>
                         <thead>
                             <tr>
@@ -72,7 +72,7 @@ const Home = () => {
                                 <th>Manage</th>
                             </tr>
                         </thead>
-                        {tasks.map((task, index) => <Task key={task._id} task={task} index={index} tasks={tasks}></Task>)}
+                        {tasks.map((task, index) => <Task key={task._id} task={task} index={index} tasks={tasks} refetch={refetch}></Task>)}
                     </Table>
                 </div>
             </Container>

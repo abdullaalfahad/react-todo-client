@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
+import './Task.css';
 
-const Task = ({ task, index, tasks }) => {
+const Task = ({ task, index, refetch }) => {
     const { _id, name, description } = task;
+    const [checked, isChecked] = useState(false);
+    const onClick = () => {
+        isChecked(true);
+        alert('Task Completed');
+    };
 
     const handleDelete = id => {
         const proceed = window.confirm('Are you sure?');
@@ -13,10 +19,7 @@ const Task = ({ task, index, tasks }) => {
             })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.deletedCount > 0) {
-                        const remain = tasks.filter(t => t._id !== id);
-                        tasks = remain;
-                    }
+                    refetch();
                 })
 
         }
@@ -24,13 +27,13 @@ const Task = ({ task, index, tasks }) => {
 
     return (
         <tbody>
-            <tr>
+            <tr {...(checked && { className: 'crossed-line' })}>
                 <td>{index + 1}</td>
                 <td>{name}</td>
-                <td>{description}</td>
-                <td><Button>Complete</Button> <Button variant='danger' className='' onClick={() => handleDelete(_id)}>Delete</Button></td>
+                <td >{description}</td>
+                <td><Button onClick={onClick}>Complete</Button> <Button variant='danger' className='' onClick={() => handleDelete(_id)}>Delete</Button></td>
             </tr>
-        </tbody>
+        </tbody >
     );
 };
 
